@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Interactive Treasure Hunt</title>
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{% static 'puzzle/style.css' %}"
+    />
+  </head>
+  <body>
+    <div class="header">
+      <h1>Welcome to the Interactive Treasure Hunt!</h1>
+      <p>Enter your details to solve the puzzle and find the treasure.</p>
+      <form method="post">
+        {% csrf_token %} {{ form.as_p }}
+        <button type="submit">Solve the Puzzle</button>
+      </form>
+    </div>
+
+    {% if form.errors %}
+    <div class="errors">
+      <h3>Please correct the errors below:</h3>
+      {{ form.errors }}
+    </div>
+    {% endif %} {% if result %}
+    <div class="user-inputs">
+      <p>The user inputs:</p>
+      <ul>
+        <li>Number: {{ result.user_number }}</li>
+        <li>Text: "{{ result.user_text }}"</li>
+      </ul>
+      <p>And clicks "Solve the Puzzle".</p>
+      <p>After submitting the form, the user sees the following results:</p>
+    </div>
+
+    <div class="result">
+      <h2>Number Puzzle:</h2>
+      <p>- {{ result.number_result }}</p>
+
+      <h2>Text Puzzle:</h2>
+      <p>- Binary: {{ result.binary }}</p>
+      <p>- Vowel Count: {{ result.vowels }}</p>
+
+      <h2>Treasure Hunt:</h2>
+      <p>- {{ result.treasure }}</p>
+      <ul>
+        {% for attempt in result.attempts %}
+        <li>- {{ attempt }}</li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+  </body>
+</html>
